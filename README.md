@@ -5,7 +5,7 @@ Scripts used to automate as much of our processes as possible.
 Accepts four inputs:
 * Rice repo URL (default: git@github.com:ua-eas/ksd-kc5.2.1-rice.git)
 * Release ticket number
-* Release version number
+* New Release version number (Master +1)
 * Version prefix (default: ua-release)
 
 Checks out the Rice repository from the specified url into `/tmp/repo/rice` (removing any existing files), and executes Maven JGitFlow plugin `release-start` and `release-finish` goals as configured in the Rice project `pom.xml`.
@@ -19,7 +19,7 @@ Accepts five inputs:
 * KFS repo URL (default: git@github.com:ua-eas/kfs.git)
 * KFS Docker repo url (default: git@github.com:ua-eas/docker-kfs6.git)
 * Release ticket number
-* Release version number
+* New Release version number (Master +1)
 * Version prefix (default: ua-release)
 
 Checks out the KFS repository from the specified url into `/tmp/repo/kfs` (removing any existing files), and executes Maven JGitFlow plugin `release-start` and `release-finish` goals as configured in the KFS project `pom.xml`.  
@@ -29,7 +29,7 @@ After KFS has been updated, checks out the Docker KFS repository from the specif
 Accepts four inputs:
 * KFS help text repo URL (default: git@github.com:ua-eas/kfs-help.git)
 * Release ticket number
-* Release version number
+* New Release version number (Master +1)
 * Version prefix (default: ua-release)
 
 Checks out the kfs-help repository from the specified url into `/tmp/repo/kfs-help` (removing any existing files), and executes Maven JGitFlow plugin `release-start` and `release-finish` goals as configured in the kfs-help project `pom.xml`.  
