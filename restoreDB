@@ -1,0 +1,86 @@
+#!/usr/bin/env ruby
+
+require 'aws-sdk'
+require 'logger'
+
+STDOUT.sync = true
+SLEEP_INTERVAL = 30
+@logger = Logger.new(STDOUT)
+@logger.level = Logger::INFO
+
+usage = 'usage: ruby kfs_dbupgrade_provision.rb database_instance_identifier
+  database_instance_identifier - String to use as the AWS Database Instance Identifier for the provisioned database.'
+#TODO add a lot more arguments, lots of hardcoding, like instance size, security group name, etc
+# use OptionParser http://ruby-doc.org/stdlib-2.3.1/libdoc/optparse/rdoc/OptionParser.html
+if ARGV.length != 1
+  print usage
+  exit
+end
+
+DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
+@rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
+response = @rds.describe_db_snapshots(db_instance_identifier: 'kfimp')
+@snapshots = response[:db_snapshots]
+@snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
+@snapshot_id = @snapshots[-1][:db_snapshot_identifier]
+@db_instance_identifier = ARGV[0]
+@db_name = @db_instance_identifier
+
+@restore_opts      = {
+    :db_snapshot_identifier     => @snapshot_id,
+    :db_instance_identifier     => @db_instance_identifier,
+    :db_instance_class          => 'db.m4.large',
+    :port                       => 1521,
+    :availability_zone          => 'us-west-2a',
+    #TODO update
+    :db_subnet_group_name       => 'kfs-import',
+    :multi_az                   => false,
+    :publicly_accessible        => false,
+    :auto_minor_version_upgrade => true,
+    :license_model              => 'bring-your-own-license',
+    :db_name                    => @db_name,
+    :engine                     => 'oracle-ee',
+    :option_group_name          => 'ua-oracle-ee-12-1-eas-prod'
+    #TODO update
+    #:tags                       => TAGS,
+}
+
+@logger.info "Restoring snapshot \"#{@snapshot_id}\""
+@rds.restore_db_instance_from_db_snapshot(@restore_opts)
+
+# wait for restore
+instance = @rds.describe_db_instances(db_instance_identifier: @db_instance_identifier)
+status = instance[:db_instances][0][:db_instance_status]
+@logger.info "Waiting for restore. Current status is: \"#{status}\""
+while status != 'available' do
+  sleep(SLEEP_INTERVAL)
+  instance = @rds.describe_db_instances(db_instance_identifier: @db_instance_identifier)
+  status = instance[:db_instances][0][:db_instance_status]
+  @logger.info "Waiting for restore. Current status is: \"#{status}\""
+end
+@logger.info "Restore complete."
+
+@modify_security_opts = {
+    :db_instance_identifier     => @db_name,
+    :vpc_security_group_ids     => ['sg-e3ba5084'],
+    :apply_immediately          => true
+}
+
+@logger.info "Modifying security group."
+@rds.modify_db_instance(@modify_security_opts)
+
+# wait one interval for security group to execute "instantly"
+@logger.info "Arbitrarily waiting for security group change request to be initiated."
+sleep(SLEEP_INTERVAL)
+
+# wait for security group change to stick
+instance = @rds.describe_db_instances(db_instance_identifier: @db_instance_identifier)
+status = instance[:db_instances][0][:db_instance_status]
+# TODO is there a reason to wait for the security group change? Shouldn't affect the snapshot
+@logger.info "Waiting for security group change. Current status is: \"#{status}\""
+while status != 'available' do
+  sleep(SLEEP_INTERVAL)
+  instance = @rds.describe_db_instances(db_instance_identifier: @db_instance_identifier)
+  status = instance[:db_instances][0][:db_instance_status]
+  @logger.info "Waiting for security group change. Current status is: \"#{status}\""
+end
