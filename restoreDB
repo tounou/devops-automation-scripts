@@ -23,7 +23,6 @@ response = @rds.describe_db_snapshots(db_instance_identifier: 'kfimp-2016-12-10-
 @snapshots = response[:db_snapshots]
 @snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
 @snapshot_id = @snapshots[-1][:db_snapshot_identifier]
-#snapshot_id = 'rds:kfimp-2016-12-10-10-39'
 @db_instance_identifier = ARGV[0]
 @db_name = @db_instance_identifier
 
