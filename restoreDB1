@@ -22,24 +22,25 @@ print "\n"
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
-print "\n Describe_db_snapshots: "
-print response
-print "\n"
+
 print "\n Details of snapshots: \n"
 print "\n"
 @snapshots = response[:db_snapshots]
 print @snapshots
 print "\n"
+
 @snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
 @snapshot_id = @snapshots[-1][:db_snapshot_identifier]
 print "\n Snapshot_id is: "
 print @snapshot_id
 print "\n"
-print "\n Db_instance_identifier is: "
+
+print "\n New DB_instance_identifier is: "
 @db_instance_identifier = ARGV[1]
 print @db_instance_identifier
 print "\n"
 print "\n"
+
 @db_name = @db_instance_identifier
 
 @restore_opts      = {
