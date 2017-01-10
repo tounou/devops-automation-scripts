@@ -25,10 +25,12 @@ DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
 print response
 @snapshots = response[:db_snapshots]
+print @snapshots
 @snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
 @snapshot_id = @snapshots[-1][:db_snapshot_identifier]
+print @snapshot_id
 @db_instance_identifier = ARGV[1]
-print db_instance_identifier
+print @db_instance_identifier
 @db_name = @db_instance_identifier
 
 @restore_opts      = {
