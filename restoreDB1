@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+ #!/usr/bin/env ruby
 
 require 'aws-sdk'
 require 'logger'
@@ -19,21 +19,21 @@ usage = 'usage: ruby kfs_dbupgrade_provision.rb database_instance_identifier
 puts ARGV[0]
 puts ARGV[1]
 @snapshot_name = ARGV[0]
-print " snapshot_name is \n"
+print "\n snapshot_name is \n"
 print @snapshot_name
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
-print "CLI response is \n"
+print "\n CLI response is \n"
 print response
-print "List of snapshots \n"
+print "\n List of snapshots \n"
 @snapshots = response[:db_snapshots]
 print @snapshots
 @snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
 @snapshot_id = @snapshots[-1][:db_snapshot_identifier]
-print "snapshot_id is \n"
+print "\n snapshot_id is \n"
 print @snapshot_id
-print "db_instance_identifier is \n"
+print "\n db_instance_identifier is \n"
 @db_instance_identifier = ARGV[1]
 print @db_instance_identifier
 puts '\n'
