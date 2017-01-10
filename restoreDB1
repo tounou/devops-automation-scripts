@@ -26,6 +26,7 @@ print "\n Describe_db_snapshots: "
 print response
 print "\n"
 print "\n Details of snapshots: "
+print "\n"
 @snapshots = response[:db_snapshots]
 print @snapshots
 print "\n"
