@@ -16,14 +16,16 @@ if ARGV.length != 1
   print usage
   exit
 end
-
+@snapshot_name = ARGV[0]
+print @snapshot_name
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
-response = @rds.describe_db_snapshots(db_instance_identifier: 'kfimp')
+response = @rds.describe_db_snapshots(db_instance_identifier: @snapshot_name )
 @snapshots = response[:db_snapshots]
 @snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
 @snapshot_id = @snapshots[-1][:db_snapshot_identifier]
-@db_instance_identifier = ARGV[0]
+@db_instance_identifier = ARGV[1]
+print @db_instance_identifier
 @db_name = @db_instance_identifier
 
 @restore_opts      = {
@@ -46,7 +48,7 @@ response = @rds.describe_db_snapshots(db_instance_identifier: 'kfimp')
 }
 
 @logger.info "Restoring snapshot \"#{@snapshot_id}\""
-@rds.restore_db_instance_from_db_snapshot(@restore_opts)
+#@rds.restore_db_instance_from_db_snapshot(@restore_opts)
 
 # wait for restore
 instance = @rds.describe_db_instances(db_instance_identifier: @db_instance_identifier)
