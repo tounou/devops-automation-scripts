@@ -1,3 +1,4 @@
+
 #!/usr/bin/env ruby
 
 require 'aws-sdk'
@@ -21,6 +22,8 @@ DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
 @snapshot_id = ARGV[0]
 @db_instance_identifier = ARGV[1]
+print snapshot_id
+print db_instance_identifier
 #response = @rds.describe_db_snapshots(db_snapshot_identifier)
 #@snapshots = response[:db_snapshots]
 #@snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
