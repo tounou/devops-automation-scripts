@@ -25,7 +25,7 @@ response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
 print "\n Describe_db_snapshots: "
 print response
 print "\n"
-print "\n Details of snapshots: "
+print "\n Details of snapshots: \n"
 print "\n"
 @snapshots = response[:db_snapshots]
 print @snapshots
@@ -38,6 +38,7 @@ print "\n"
 print "\n Db_instance_identifier is: "
 @db_instance_identifier = ARGV[1]
 print @db_instance_identifier
+print "\n"
 print "\n"
 @db_name = @db_instance_identifier
 
