@@ -16,24 +16,28 @@ usage = 'usage: ruby kfs_dbupgrade_provision.rb database_instance_identifier
 puts ARGV[0]
 puts ARGV[1]
 @snapshot_name = ARGV[0]
-print "\n Snapshot_name is "
+print "\n Snapshot_name is: "
 print @snapshot_name
+print "\n"
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
-print "\n Describe_db_snapshots "
+print "\n Describe_db_snapshots: "
 print response
-print "\n List of snapshots "
+print "\n"
+print "\n Details of snapshots: "
 @snapshots = response[:db_snapshots]
 print @snapshots
+print "\n"
 @snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
 @snapshot_id = @snapshots[-1][:db_snapshot_identifier]
-print "\n Snapshot_id is "
+print "\n Snapshot_id is: "
 print @snapshot_id
-print "\n Db_instance_identifier is "
+print "\n"
+print "\n Db_instance_identifier is: "
 @db_instance_identifier = ARGV[1]
 print @db_instance_identifier
-puts '\n'
+print "\n"
 @db_name = @db_instance_identifier
 
 @restore_opts      = {
