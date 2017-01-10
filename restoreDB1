@@ -16,8 +16,8 @@ usage = 'usage: ruby kfs_dbupgrade_provision.rb database_instance_identifier
   print usage
 #  exit
 @end
-puts ARGV[0]
-puts ARGV[1]
+#puts ARGV[0]
+#puts ARGV[1]
 @snapshot_name = ARGV[0]
 print @snapshot_name
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
