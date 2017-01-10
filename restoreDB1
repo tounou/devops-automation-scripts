@@ -1,3 +1,4 @@
+uts '\n'
 #!/usr/bin/env ruby
 
 require 'aws-sdk'
@@ -19,11 +20,14 @@ usage = 'usage: ruby kfs_dbupgrade_provision.rb database_instance_identifier
 puts ARGV[0]
 puts ARGV[1]
 @snapshot_name = ARGV[0]
+print "\n"
 print @snapshot_name
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
+print "\n"
 print response
+print "\n"
 puts 'CLI response is \n'
 @snapshots = response[:db_snapshots]
 print @snapshots
