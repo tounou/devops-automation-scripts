@@ -28,7 +28,6 @@ print "\n"
 @snapshots = response[:db_snapshots]
 print @snapshots
 print "\n"
-
 @snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
 @snapshot_id = @snapshots[-1][:db_snapshot_identifier]
 print "\n Snapshot_id is: "
@@ -63,7 +62,7 @@ print "\n"
 }
 
 @logger.info "Restoring snapshot \"#{@snapshot_id}\""
-#@rds.restore_db_instance_from_db_snapshot(@restore_opts)
+@rds.restore_db_instance_from_db_snapshot(@restore_opts)
 
 # wait for restore
 instance = @rds.describe_db_instances(db_instance_identifier: @db_instance_identifier)
