@@ -12,28 +12,25 @@ usage = 'usage: ruby kfs_dbupgrade_provision.rb database_instance_identifier
   database_instance_identifier - String to use as the AWS Database Instance Identifier for the provisioned database.'
 #TODO add a lot more arguments, lots of hardcoding, like instance size, security group name, etc
 # use OptionParser http://ruby-doc.org/stdlib-2.3.1/libdoc/optparse/rdoc/OptionParser.html
-#if ARGV.length != 1
-  print usage
-#  exit
-@end
+
 puts ARGV[0]
 puts ARGV[1]
 @snapshot_name = ARGV[0]
-print "\n snapshot_name is \n"
+print "\n Snapshot_name is "
 print @snapshot_name
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
-print "\n CLI response is \n"
+print "\n Describe_db_snapshots "
 print response
-print "\n List of snapshots \n"
+print "\n List of snapshots "
 @snapshots = response[:db_snapshots]
 print @snapshots
 @snapshots.sort_by! { |snap| snap[:snapshot_create_time] }
 @snapshot_id = @snapshots[-1][:db_snapshot_identifier]
-print "\n snapshot_id is \n"
+print "\n Snapshot_id is "
 print @snapshot_id
-print "\n db_instance_identifier is \n"
+print "\n Db_instance_identifier is "
 @db_instance_identifier = ARGV[1]
 print @db_instance_identifier
 puts '\n'
