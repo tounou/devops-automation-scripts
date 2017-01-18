@@ -19,7 +19,18 @@ puts ARGV[1]
 print "\n Snapshot_name is: "
 print @snapshot_name
 print "\n"
+REGION1=ENV['AWS_DEFAULT_REGION']
+print "\n  Region1 is: "
+print @REGION1
+print "\n"
+REGION2=ENV['blabla']
+print "\n  Region2 is: "
+print @REGION2
+print "\n"
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
+print "\n Defaul Region is: "
+print @DEFAULT_REGION
+print "\n"
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
 
@@ -62,7 +73,7 @@ print "\n"
 }
 
 @logger.info "Restoring snapshot \"#{@snapshot_id}\""
-@rds.restore_db_instance_from_db_snapshot(@restore_opts)
+#@rds.restore_db_instance_from_db_snapshot(@restore_opts)
 
 # wait for restore
 instance = @rds.describe_db_instances(db_instance_identifier: @db_instance_identifier)
