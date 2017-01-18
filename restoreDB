@@ -32,9 +32,6 @@ print "\n Defaul Region is: "
 print DEFAULT_REGION
 print "\n"
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
-print "\n RDS is: " 
-32 print @rds 
-33 print "\n" 
 
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
 
