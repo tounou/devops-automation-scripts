@@ -1,4 +1,4 @@
- #!/usr/bin/env ruby
+  #!/usr/bin/env ruby
 
 require 'aws-sdk'
 require 'logger'
@@ -23,7 +23,7 @@ REGION1=ENV['AWS_DEFAULT_REGION']
 print "\n  Region1 is: "
 print @REGION1
 print "\n"
-REGION2=ENV['blabla']
+REGION2=ENV['blabla'] || 'other-thing'
 print "\n  Region2 is: "
 print @REGION2
 print "\n"
