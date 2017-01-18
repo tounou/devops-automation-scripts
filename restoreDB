@@ -21,19 +21,19 @@ print @snapshot_name
 print "\n"
 REGION1=ENV['AWS_DEFAULT_REGION']
 print "\n  Region1 is: "
-print @REGION1
+print REGION1
 print "\n"
 REGION2=ENV['blabla'] || 'other-thing'
 print "\n  Region2 is: "
-print @REGION2
+print REGION2
 print "\n"
 DEFAULT_REGION = ENV['AWS_DEFAULT_REGION'] || 'us-west-2'
 print "\n Defaul Region is: "
-print @DEFAULT_REGION
+print DEFAULT_REGION
 print "\n"
 @rds = ::Aws::RDS::Client.new(region: DEFAULT_REGION)
 print "\n RDS is: " 
-32 print @rds 
+32 print rds 
 33 print "\n" 
 
 response = @rds.describe_db_snapshots(db_snapshot_identifier: @snapshot_name )
